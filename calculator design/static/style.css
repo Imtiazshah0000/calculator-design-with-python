@@ -1,0 +1,313 @@
+:root {
+    --bg-color: #0f172a;
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --accent-color: #38bdf8;
+    --neon-blue: #0ea5e9;
+    --neon-pink: #ec4899;
+    --neon-green: #10b981;
+    --text-color: #f8fafc;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    color: var(--text-color);
+}
+
+/* Background Animation */
+.background-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: radial-gradient(circle at 50% 50%, #1e293b 0%, #0f172a 100%);
+}
+
+.background-animation::before {
+    content: '';
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    top: -50%;
+    left: -50%;
+    background: conic-gradient(
+        from 0deg,
+        transparent 0deg,
+        var(--neon-blue) 90deg,
+        transparent 180deg,
+        var(--neon-pink) 270deg,
+        transparent 360deg
+    );
+    animation: rotate 10s linear infinite;
+    opacity: 0.1;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Calculator Container */
+.calculator-container {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    max-width: 900px;
+    width: 100%;
+    padding: 20px;
+    justify-content: center;
+}
+
+/* Calculator Glassmorphism */
+.calculator {
+    background: var(--glass-bg);
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 25px;
+    width: 350px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease;
+}
+
+.calculator:hover {
+    transform: translateY(-5px);
+}
+
+/* Display Screen */
+.display {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 25px;
+    text-align: right;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.history-text {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.result-text {
+    font-size: 2.5rem;
+    font-weight: 600;
+    word-wrap: break-word;
+    word-break: break-all;
+    transition: all 0.2s ease;
+}
+
+/* Buttons Grid */
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.btn {
+    border: none;
+    outline: none;
+    background: var(--glass-bg);
+    color: var(--text-color);
+    font-size: 1.2rem;
+    font-weight: 500;
+    padding: 15px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid var(--glass-border);
+}
+
+.btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+}
+
+.btn:active {
+    transform: scale(0.95);
+}
+
+/* Special Button Colors */
+.operator {
+    color: var(--neon-blue);
+    font-weight: 600;
+}
+
+.operator:hover {
+    background: rgba(14, 165, 233, 0.15);
+    box-shadow: 0 0 20px rgba(14, 165, 233, 0.3);
+    border-color: var(--neon-blue);
+}
+
+.advanced {
+    color: var(--neon-pink);
+}
+
+.advanced:hover {
+    background: rgba(236, 72, 153, 0.15);
+    box-shadow: 0 0 20px rgba(236, 72, 153, 0.3);
+    border-color: var(--neon-pink);
+}
+
+.equals {
+    grid-row: span 2;
+    background: linear-gradient(135deg, var(--neon-blue), var(--neon-pink));
+    color: white;
+    font-size: 1.5rem;
+    border: none;
+}
+
+.equals:hover {
+    box-shadow: 0 0 25px rgba(14, 165, 233, 0.5);
+    transform: scale(1.02);
+}
+
+.double {
+    grid-column: span 2;
+}
+
+/* History Panel */
+.history-panel {
+    background: var(--glass-bg);
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 20px;
+    width: 300px;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0;
+    transform: translateX(50px);
+    pointer-events: none;
+    position: absolute;
+    right: 50px;
+}
+
+.history-panel.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: all;
+    position: relative;
+    right: auto;
+}
+
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.history-list {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 15px;
+}
+
+.history-item {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+    border-left: 3px solid var(--neon-blue);
+    animation: slideIn 0.3s ease forwards;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.empty-msg {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.3);
+    margin-top: 50px;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.clear-history-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    color: var(--neon-pink);
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.clear-history-btn:hover {
+    background: rgba(236, 72, 153, 0.1);
+    border-color: var(--neon-pink);
+}
+
+/* Loading Animation */
+.loading {
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .calculator-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .history-panel {
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        height: 50vh;
+        border-radius: 24px 24px 0 0;
+        transform: translateY(100%);
+    }
+    
+    .history-panel.active {
+        transform: translateY(0);
+    }
+}
